@@ -5,9 +5,9 @@ PROJECT(wave)
 SET(WAVE_PACKAGE_VERSION 0.1.0)
 
 # Compiler settings for all targets
-SET(CMAKE_CXX_STANDARD 11)
+SET(CMAKE_CXX_STANDARD 17)
 SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
-ADD_COMPILE_OPTIONS(-Wall -Wextra -Wno-strict-overflow)
+ADD_COMPILE_OPTIONS(-Wall -Wextra -Wno-strict-overflow -ftemplate-backtrace-limit=0)
 
 # Default to Release build type, otherwise some modules will be slow
 IF(NOT CMAKE_BUILD_TYPE)
@@ -16,6 +16,9 @@ IF(NOT CMAKE_BUILD_TYPE)
    SET(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
    SET_PROPERTY(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
        "None" "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+   IF(CMAKE_BUILD_TYPE MATCHES Release OR CMAKE_BUILD_TYPE MATCHES RelWithDebInfo)
+       ADD_COMPILE_OPTIONS(-march=native)
+   ENDIF()
 ENDIF()
 
 # CMake modules
@@ -32,7 +35,7 @@ OPTION(EXPORT_BUILD
 OPTION(BUILD_TESTING "Build tests" ON)
 OPTION(BUILD_BENCHMARKS
     "Build benchmarks for some components. Requires google benchmark package."
-    OFF)
+    ON)
 
 
 # Find all dependencies here, and ensure they have IMPORTED targets
@@ -50,9 +53,20 @@ FIND_PACKAGE(PCL 1.8 COMPONENTS
 FIND_PACKAGE(kindr)
 FIND_PACKAGE(OpenCV 3.2.0)
 FIND_PACKAGE(yaml-cpp REQUIRED)
-FIND_PACKAGE(Ceres 1.12)
+FIND_PACKAGE(Ceres 1.14)
 FIND_PACKAGE(GTSAM)
+FIND_PACKAGE(PythonLibs 2.7 REQUIRED)
 FIND_PACKAGE(GeographicLib 1.49)
+FIND_PACKAGE(OpenMP)
+if (OPENMP_FOUND)
+    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+endif()
+FIND_PACKAGE(libnabo)
+
+MESSAGE(STATUS ${libnabo_INCLUDE_DIRS})
+MESSAGE(STATUS ${libnabo_LIBRARIES})
 
 # Where dependencies do not provide IMPORTED targets, define them
 INCLUDE(cmake/ImportEigen3.cmake)
@@ -61,6 +75,7 @@ INCLUDE(cmake/ImportPCL.cmake)
 INCLUDE(cmake/ImportKindr.cmake)
 INCLUDE(cmake/ImportYaml-cpp.cmake)
 INCLUDE(cmake/ImportCeres.cmake)
+INCLUDE(cmake/ImportLibnabo.cmake)
 
 # Optionally build tests. `gtest` is included with this project
 IF(BUILD_TESTING)
@@ -107,14 +122,16 @@ INSTALL(TARGETS wave EXPORT waveTargets)
 # Modules with missing dependencies are not built, and circular dependencies are
 # not supported. Thus modules must be listed after their dependencies, for now.
 ADD_SUBDIRECTORY(wave_utils)
+ADD_SUBDIRECTORY(wave_geometry_og)
 ADD_SUBDIRECTORY(wave_geometry)
 ADD_SUBDIRECTORY(wave_containers)
 ADD_SUBDIRECTORY(wave_benchmark)
 ADD_SUBDIRECTORY(wave_controls)
 ADD_SUBDIRECTORY(wave_kinematics)
 ADD_SUBDIRECTORY(wave_matching)
-ADD_SUBDIRECTORY(wave_vision)
+#ADD_SUBDIRECTORY(wave_vision)
 ADD_SUBDIRECTORY(wave_optimization)
+ADD_SUBDIRECTORY(wave_odometry)
 ADD_SUBDIRECTORY(wave_gtsam)
 ADD_SUBDIRECTORY(wave_geography)
 

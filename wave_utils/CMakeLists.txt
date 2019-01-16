@@ -13,6 +13,10 @@ WAVE_ADD_MODULE(${PROJECT_NAME}
     src/angles.cpp
     src/pose_cov_comp.cpp)
 
+TARGET_LINK_LIBRARIES(wave_utils
+        PUBLIC
+        python2.7)
+
 # Unit tests
 IF(BUILD_TESTING)
     WAVE_ADD_TEST(${PROJECT_NAME}_tests

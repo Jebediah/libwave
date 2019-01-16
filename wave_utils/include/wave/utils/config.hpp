@@ -51,7 +51,7 @@ struct ConfigParamBase {
     bool optional;    //!< if true, it is not an error if the key is not found
 
  protected:
-    ~ConfigParamBase() = default;  // disallow deletion through pointer to base
+    virtual ~ConfigParamBase() = default;
 };
 
 /** Represents a parameter to be parsed in the yaml file */
@@ -206,17 +206,6 @@ struct convert<Eigen::Matrix<Scalar, Rows, 1>> {
      */
     static bool decode(const Node &node, Eigen::Matrix<Scalar, Rows, 1> &out);
 };
-
-// Explicit instantiations: include these in the compiled wave_utils library
-// Since the function definition is in a .cpp file, other types will not work
-template struct convert<wave::Mat2>;
-template struct convert<wave::Mat3>;
-template struct convert<wave::Mat4>;
-template struct convert<wave::MatX>;
-template struct convert<wave::Vec2>;
-template struct convert<wave::Vec3>;
-template struct convert<wave::Vec4>;
-template struct convert<wave::VecX>;
 
 }  // namespace YAML
 

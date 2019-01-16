@@ -24,11 +24,13 @@ namespace wave {
 
 #ifndef EIGEN_TYPEDEF
 #define EIGEN_TYPEDEF
+typedef Eigen::Matrix<double, 1, 1> Vec1;
 typedef Eigen::Vector2d Vec2;
 typedef Eigen::Vector3d Vec3;
 typedef Eigen::Vector4d Vec4;
 typedef Eigen::Matrix<double, 5, 1> Vec5;
 typedef Eigen::Matrix<double, 6, 1> Vec6;
+typedef Eigen::Matrix<double, 12, 1> Vec12;
 typedef Eigen::VectorXd VecX;
 
 typedef Eigen::Matrix2d Mat2;
@@ -36,7 +38,29 @@ typedef Eigen::Matrix3d Mat3;
 typedef Eigen::Matrix4d Mat4;
 typedef Eigen::Matrix<double, 5, 5> Mat5;
 typedef Eigen::Matrix<double, 6, 6> Mat6;
+typedef Eigen::Matrix<double, 12, 12> Mat12;
 typedef Eigen::MatrixXd MatX;
+
+typedef Eigen::Matrix<double, 3, 4> Mat34;
+
+typedef Eigen::Matrix<float, 1, 1> Vec1f;
+typedef Eigen::Vector2f Vec2f;
+typedef Eigen::Vector3f Vec3f;
+typedef Eigen::Vector4f Vec4f;
+typedef Eigen::Matrix<float, 5, 1> Vec5f;
+typedef Eigen::Matrix<float, 6, 1> Vec6f;
+typedef Eigen::Matrix<float, 12, 1> Vec12f;
+typedef Eigen::VectorXf VecXf;
+
+typedef Eigen::Matrix2f Mat2f;
+typedef Eigen::Matrix3f Mat3f;
+typedef Eigen::Matrix4f Mat4f;
+typedef Eigen::Matrix<float, 5, 5> Mat5f;
+typedef Eigen::Matrix<float, 6, 6> Mat6f;
+typedef Eigen::Matrix<float, 12, 12> Mat12f;
+typedef Eigen::MatrixXf MatXf;
+
+typedef Eigen::Matrix<float, 3, 4> Mat34f;
 
 typedef Eigen::Affine3d Affine3;
 

@@ -1,0 +1,16 @@
+# This controls the bins for feature tracks. Each bin spans a range and azimuth.
+# within each bin, the number of tracks is capped by their vector to limit redundant tracks
+
+range_divisions: [
+    10.0,
+    25.0,
+    40.0]
+
+azimuth_divisions: 4
+
+xy_directions: 4
+
+z_cutoff: 0.5253
+
+z_limit: 1
+xy_limit: 1
